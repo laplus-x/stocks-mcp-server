@@ -1,5 +1,3 @@
-stocks-mcp-server 是一個基於 Spring Boot 與 [Model Context Protocol (MCP)](https://modelcontextprotocol.org/) 的台股查詢後端服務。提供股票名稱/代碼查詢、即時股價、成交量等資訊，並以 AI 工具形式暴露 API，方便集成至 AI Agent 或自動化流程。
-
 # 📈 stocks-mcp-server
 
 > Spring Boot + MCP Server based AI tool service for Taiwan Stock Query
