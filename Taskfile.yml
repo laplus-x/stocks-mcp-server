@@ -1,0 +1,37 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  APP_NAME: stocks-mcp-server
+  IMAGE_REG: registry.com
+  IMAGE_ORG: poc
+  IMAGE_NAME: "{{.APP_NAME}}"
+  IMAGE_PATH: "{{.IMAGE_REG}}/{{.IMAGE_ORG}}/{{.IMAGE_NAME}}"
+  IMAGE_VER: v1.0.0
+
+tasks:
+  lint:check:
+    cmds:
+      - mvn spotless:check
+  lint:apply:
+    cmds:
+      - mvn spotless:apply
+  debug:inspect:
+    cmds:
+      - npx @modelcontextprotocol/inspector
+
+  build:image:
+    vars:
+      CLI_ARGS: --load
+        -t {{.IMAGE_PATH}}:{{.IMAGE_VER}}
+        -t {{.IMAGE_PATH}}:latest
+    cmds:
+      - docker buildx build . {{.CLI_ARGS}}
+
+  debug:image:
+    vars:
+      IMAGE_VER: latest
+      CLI_ARGS: --rm -it --env-file .env --add-host host.docker.internal:host-gateway --entrypoint bash
+    cmds:
+      - docker run {{.CLI_ARGS}} {{.IMAGE_PATH}}:{{.IMAGE_VER}}
