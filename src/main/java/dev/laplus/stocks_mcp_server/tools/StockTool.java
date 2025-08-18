@@ -5,15 +5,19 @@ import dev.laplus.stocks_mcp_server.exceptions.NotFoundException;
 import dev.laplus.stocks_mcp_server.usecases.StockService;
 import org.modelmapper.ModelMapper;
 import org.springframework.ai.tool.annotation.Tool;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
 public class StockTool {
-  @Autowired private ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-  @Autowired private StockService stockService;
+  private final StockService stockService;
+
+  public StockTool(ModelMapper modelMapper, StockService stockService) {
+    this.modelMapper = modelMapper;
+    this.stockService = stockService;
+  }
 
   @Tool(name = "getStock", description = "Retrieve stock information by stock name or symbol")
   public StockResource getStock(String name) {

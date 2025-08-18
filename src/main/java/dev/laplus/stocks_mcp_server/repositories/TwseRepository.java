@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.laplus.stocks_mcp_server.dao.StockListResponse;
 import dev.laplus.stocks_mcp_server.dao.StockNameListResponse;
 import dev.laplus.stocks_mcp_server.exceptions.ParsingException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,12 +12,14 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class TwseRepository {
-  @Autowired private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-  private WebClient webClient;
+  private final WebClient webClient;
 
-  public TwseRepository(@Qualifier("twseClientBean") WebClient webClient) {
+  public TwseRepository(
+      @Qualifier("twseClientBean") WebClient webClient, ObjectMapper objectMapper) {
     this.webClient = webClient;
+    this.objectMapper = objectMapper;
   }
 
   public Mono<StockNameListResponse> getStockNames(String keyword) {
